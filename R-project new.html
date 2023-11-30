@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.433">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Clara Raphael">
+
+<title>Unveiling Socio-Economic Dynamics: A Comprehensive Exploration of Household Census Data from England, 2021</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="R-project new_files/libs/clipboard/clipboard.min.js"></script>
+<script src="R-project new_files/libs/quarto-html/quarto.js"></script>
+<script src="R-project new_files/libs/quarto-html/popper.min.js"></script>
+<script src="R-project new_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="R-project new_files/libs/quarto-html/anchor.min.js"></script>
+<link href="R-project new_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="R-project new_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="R-project new_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="R-project new_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="R-project new_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#about-data" id="toc-about-data" class="nav-link" data-scroll-target="#about-data">About Data</a></li>
+  <li><a href="#explore-data" id="toc-explore-data" class="nav-link" data-scroll-target="#explore-data">Explore Data</a>
+  <ul class="collapse">
+  <li><a href="#importing-libraries" id="toc-importing-libraries" class="nav-link" data-scroll-target="#importing-libraries">Importing libraries</a></li>
+  <li><a href="#loading-data" id="toc-loading-data" class="nav-link" data-scroll-target="#loading-data">Loading Data</a></li>
+  <li><a href="#data-inspection" id="toc-data-inspection" class="nav-link" data-scroll-target="#data-inspection">Data Inspection</a>
+  <ul class="collapse">
+  <li><a href="#data-set-shape" id="toc-data-set-shape" class="nav-link" data-scroll-target="#data-set-shape">Data set shape</a></li>
+  <li><a href="#sample-observation" id="toc-sample-observation" class="nav-link" data-scroll-target="#sample-observation">Sample observation</a></li>
+  <li><a href="#missing-values" id="toc-missing-values" class="nav-link" data-scroll-target="#missing-values">Missing values</a></li>
+  </ul></li>
+  <li><a href="#descriptive-statistics" id="toc-descriptive-statistics" class="nav-link" data-scroll-target="#descriptive-statistics">Descriptive Statistics</a>
+  <ul class="collapse">
+  <li><a href="#age" id="toc-age" class="nav-link" data-scroll-target="#age">Age:</a></li>
+  <li><a href="#income-inc" id="toc-income-inc" class="nav-link" data-scroll-target="#income-inc">Income (INC):</a></li>
+  <li><a href="#insights" id="toc-insights" class="nav-link" data-scroll-target="#insights">Insights:</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#exploratory-data-analysis" id="toc-exploratory-data-analysis" class="nav-link" data-scroll-target="#exploratory-data-analysis">Exploratory Data Analysis</a></li>
+  <li><a href="#factors-that-influences-the-household-living-conditions" id="toc-factors-that-influences-the-household-living-conditions" class="nav-link" data-scroll-target="#factors-that-influences-the-household-living-conditions">Factors that influences the household living conditions</a>
+  <ul class="collapse">
+  <li><a href="#findings" id="toc-findings" class="nav-link" data-scroll-target="#findings">Findings:</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion:</a></li>
+  </ul></li>
+  <li><a href="#clustering-analysis" id="toc-clustering-analysis" class="nav-link" data-scroll-target="#clustering-analysis">Clustering Analysis</a></li>
+  <li><a href="#insights-1" id="toc-insights-1" class="nav-link" data-scroll-target="#insights-1">Insights</a></li>
+  <li><a href="#conclusion-1" id="toc-conclusion-1" class="nav-link" data-scroll-target="#conclusion-1">Conclusion</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Unveiling Socio-Economic Dynamics: A Comprehensive Exploration of Household Census Data from England, 2021</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Clara Raphael </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>The 2021 household census conducted in England provides a rich repository of demographic and socio-economic information <span class="citation" data-cites="shipsey2020">(<a href="#ref-shipsey2020" role="doc-biblioref">Shipsey et al. 2020</a>)</span>. Working with a modified snapshot of the census data, my analysis delves into this data set, aiming to uncover compelling insights and discern patterns that illuminate the relationships between demographic variables, income levels, and living conditions.</p>
+</section>
+<section id="about-data" class="level1">
+<h1>About Data</h1>
+<p>The data set under examination is a modified snapshot derived from a comprehensive household census conducted in England in 2021. Comprising a diverse array of variables, this data set encapsulates crucial demographic and socio-economic information collected from households across the region.</p>
+<p>Key Variables include:</p>
+<ol type="1">
+<li><p>ID and Person_ID: Identification numbers assigned to households and individuals, facilitating the organization and differentiation of data entries.</p></li>
+<li><p>Age: Provides insights into the age distribution of individuals within households, aiding in demographic profiling.</p></li>
+<li><p>Mar_Stat: Indicates the marital status of individuals, enabling the exploration of household compositions.</p></li>
+<li><p>INC: Represents the annual income in pounds, serving as a pivotal indicator of households’ economic status.</p></li>
+<li><p>Female: A binary variable signifying the gender of individuals within households.</p></li>
+<li><p>H8: Binary variable denoting whether all rooms in the accommodation are exclusively used by the household where 0 means shared apartment and 1 means non-shared apartment.</p></li>
+<li><p>Eth: Captures information on the ethnicity of individuals, contributing to understanding cultural diversity.</p></li>
+<li><p>Highest Ed: Indicates the highest level of education attained by individuals, offering insights into educational backgrounds.</p></li>
+</ol>
+</section>
+<section id="explore-data" class="level1">
+<h1>Explore Data</h1>
+<p>The primary objective of this report is to provide a comprehensive understanding of the socio-economic dynamics prevalent among households in England, emphasizing the influence of income disparities on living conditions and the differential impact of demographic factors on the socio-economic status of households.</p>
+<p>To achieve that, let’s start by importing necessary libraries and load the data.</p>
+<section id="importing-libraries" class="level2">
+<h2 class="anchored" data-anchor-id="importing-libraries">Importing libraries</h2>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) <span class="co">#for data transformation and wrangling</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.3     ✔ readr     2.1.4
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.4.4     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.0
+✔ purrr     1.0.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2) <span class="co"># for creating data visualization</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggthemes) <span class="co">#customizing data visualizations</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr) <span class="co">#data manipulation</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: lattice
+
+Attaching package: 'caret'
+
+The following object is masked from 'package:purrr':
+
+    lift</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caTools)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="loading-data" class="level2">
+<h2 class="anchored" data-anchor-id="loading-data">Loading Data</h2>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"C:/Users/Jucheey/Downloads/data-1.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="data-inspection" class="level2">
+<h2 class="anchored" data-anchor-id="data-inspection">Data Inspection</h2>
+<p>After loading data, it is ideal to inspect the data to give an idea of how much data we are working with and its structure.</p>
+<section id="data-set-shape" class="level3">
+<h3 class="anchored" data-anchor-id="data-set-shape">Data set shape</h3>
+<p>The data contains 27,410 observations and 9 variables</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>n_rows <span class="ot">&lt;-</span> <span class="fu">dim.data.frame</span>(data)[<span class="dv">1</span>] <span class="co"># number of rows </span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>n_cols <span class="ot">&lt;-</span> <span class="fu">dim.data.frame</span>(data)[<span class="dv">2</span>] <span class="co"># number of columns</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Number of rows is: "</span>, n_rows, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of rows is:  27410 </code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Number of columns: "</span>, n_cols, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of columns:  9 </code></pre>
+</div>
+</div>
+</section>
+<section id="sample-observation" class="level3">
+<h3 class="anchored" data-anchor-id="sample-observation">Sample observation</h3>
+<p>From the data set, the total number of respondents is 27,410 from 10,565 households.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the number of sampled households</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Number of sampled households is:"</span>, <span class="fu">n_distinct</span>(data<span class="sc">$</span>ID), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of sampled households is: 10565 </code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Number of sampled persons is:"</span>, <span class="fu">length</span>(data<span class="sc">$</span>ID), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of sampled persons is: 27410 </code></pre>
+</div>
+</div>
+</section>
+<section id="missing-values" class="level3">
+<h3 class="anchored" data-anchor-id="missing-values">Missing values</h3>
+<p>The output “Columns with missing values:” highlights specific columns within the data set where missing values are present. This information is critical for data analysis as it indicates columns—‘Mar_Stat’, ‘INC’, and ‘Highest.Ed’—with 6144, 6173, and 1123 missing values, respectively. These missing values might require attention or handling before proceeding with any statistical analysis or modeling. Understanding and addressing missing data is crucial to ensure the accuracy and reliability of any insights or conclusions drawn from the data set <span class="citation" data-cites="kang2013">(<a href="#ref-kang2013" role="doc-biblioref">Kang 2013</a>)</span>.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check for missing values in each column and display the count per column</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">any</span>(<span class="fu">colSums</span>(<span class="fu">is.na</span>(data)) <span class="sc">&gt;</span> <span class="dv">0</span>)) {</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">"Columns with missing values:"</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">colSums</span>(<span class="fu">is.na</span>(data))[<span class="fu">colSums</span>(<span class="fu">is.na</span>(data)) <span class="sc">&gt;</span> <span class="dv">0</span>])</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">"No missing values found in any column."</span>)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Columns with missing values:"
+  Mar_Stat        INC Highest.Ed 
+      6144       6173       1123 </code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="descriptive-statistics" class="level2">
+<h2 class="anchored" data-anchor-id="descriptive-statistics">Descriptive Statistics</h2>
+<p>The descriptive statistics provide valuable insights into the Age and Income (INC) columns from the dataset. Let’s break down the information provided:</p>
+<section id="age" class="level3">
+<h3 class="anchored" data-anchor-id="age">Age:</h3>
+<ul>
+<li><strong>Minimum Age:</strong> The minimum recorded age in the dataset is 0, which could indicate entries for infants or very young children.</li>
+<li><strong>1st Quartile (Q1):</strong> 25% of the individuals are aged 16 or below.</li>
+<li><strong>Median Age:</strong> The median age, or the middle value when all ages are ordered, is 35. This means half of the individuals are below 35 and half are above.</li>
+<li><strong>Mean Age:</strong> The mean age is slightly higher than the median, at 35.67. The distribution might have a slight positive skew (as mean &gt; median), suggesting a few higher age outliers.</li>
+<li><strong>3rd Quartile (Q3):</strong> 75% of the individuals are aged 51 or below.</li>
+<li><strong>Maximum Age:</strong> The maximum recorded age is 93.</li>
+</ul>
+</section>
+<section id="income-inc" class="level3">
+<h3 class="anchored" data-anchor-id="income-inc">Income (INC):</h3>
+<ul>
+<li><strong>Minimum Income:</strong> The lowest recorded income is 0, which might indicate missing or invalid entries.</li>
+<li><strong>1st Quartile (Q1):</strong> 25% of the households have an income of 6000 or lower.</li>
+<li><strong>Median Income:</strong> The median income is 18000, indicating that half of the households have an income below this value.</li>
+<li><strong>Mean Income:</strong> The mean income is higher than the median, at 27767. This suggests a possible right-skewed distribution with some higher-income outliers.</li>
+<li><strong>3rd Quartile (Q3):</strong> 75% of the households have an income of 35900 or lower.</li>
+<li><strong>Maximum Income:</strong> The maximum recorded income is 720000.</li>
+<li><strong>Missing Values:</strong> There are 6173 missing values in the Income column (NA’s).</li>
+</ul>
+</section>
+<section id="insights" class="level3">
+<h3 class="anchored" data-anchor-id="insights">Insights:</h3>
+<ul>
+<li><strong>Age Distribution:</strong> The age distribution seems to be relatively spread out, with a mean and median close together, indicating a somewhat symmetric distribution.</li>
+<li><strong>Income Distribution:</strong> The income distribution, however, appears to be right-skewed, with a higher mean than the median, suggesting a few high-income outliers affecting the mean.</li>
+<li><strong>Potential Issues:</strong> There are quite a few missing values in the Income column that need to be addressed for a more comprehensive analysis.</li>
+<li><strong>Consider Outliers:</strong> The presence of very low or very high values in both Age and Income columns might indicate potential outliers that could significantly affect the analysis and need further investigation.</li>
+</ul>
+<p>These insights provide a preliminary understanding of the age and income distributions within the dataset. Further analysis, outlier treatment, and data cleansing might be necessary for a more accurate and robust exploration of these variables’ relationships with other factors in the dataset.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(data[<span class="fu">c</span>(<span class="st">'Age'</span>, <span class="st">'INC'</span>)],<span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Age             INC        
+ Min.   : 0.00   Min.   :     0  
+ 1st Qu.:16.00   1st Qu.:  6000  
+ Median :35.00   Median : 18000  
+ Mean   :35.67   Mean   : 27767  
+ 3rd Qu.:51.00   3rd Qu.: 35900  
+ Max.   :93.00   Max.   :720000  
+                 NA's   :6173    </code></pre>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="exploratory-data-analysis" class="level1">
+<h1>Exploratory Data Analysis</h1>
+<p>The data set has been loaded and inspected. Now, it is time to explore relationships between variables through data visualization. We will work with the ggplot2 library to achieve this.</p>
+<p>To start with, lets explore the relationship between Age and Income to see if there’s any observable trend:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove all rows with missing values from the entire data set</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>cleaned_data <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a scatter plot with a legend based on the 'H8' column</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(cleaned_data, <span class="fu">aes</span>(<span class="at">x =</span> Age, <span class="at">y =</span> INC, <span class="at">color =</span> <span class="fu">factor</span>(H8))) <span class="sc">+</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Age vs. Income with Living Conditions"</span>,</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Age"</span>,</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Income"</span>,</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">"Living Conditions"</span>) <span class="sc">+</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"0"</span> <span class="ot">=</span> <span class="st">"blue"</span>, <span class="st">"1"</span> <span class="ot">=</span> <span class="st">"red"</span>), </span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>                     <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Non-Exclusive LC"</span>, </span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Exclusive LC"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="R-project-new_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The relationship between age and income is a linear relationship which means that the older a person gets, the higher the income.This is also true when compared with those living in an exclusive apartment (H8). However, there are categories of persons that still earn low (below 100k) despite the variation in age</p>
+<p>To further explore the relationship between age and income, we will categorize them into groups.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create intervals for income levels and assign labels</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>cleaned_data[<span class="st">"income_group"</span>] <span class="ot">=</span> <span class="fu">cut</span>(cleaned_data<span class="sc">$</span>INC, <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">20000</span>, <span class="dv">40000</span>, <span class="dv">60000</span>,<span class="dv">80000</span>, <span class="cn">Inf</span>), <span class="fu">c</span>(<span class="st">"0-20k"</span>, <span class="st">"20-40k"</span>, <span class="st">"40-60k"</span>, <span class="st">"60-80k"</span>, <span class="st">"80k+"</span>), <span class="at">include.lowest=</span><span class="cn">TRUE</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Create intervals for age and assign labels</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>cleaned_data<span class="sc">$</span>Age_Group <span class="ot">&lt;-</span> <span class="fu">cut</span>(cleaned_data<span class="sc">$</span>Age, <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">18</span>, <span class="dv">30</span>, <span class="dv">40</span>,<span class="dv">50</span>,<span class="dv">60</span>, <span class="cn">Inf</span>), <span class="fu">c</span>(<span class="st">"0-18"</span>, <span class="st">"19-30"</span>, <span class="st">"31-40"</span>, <span class="st">"41-50"</span>, <span class="st">"51-60"</span>, <span class="st">"60+"</span>), <span class="at">include.lowest=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the mean income for each age group</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>mean_income_age <span class="ot">&lt;-</span> cleaned_data <span class="sc">%&gt;%</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Age_Group) <span class="sc">%&gt;%</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_income =</span> <span class="fu">mean</span>(INC, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting a bar chart of average income by age group</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mean_income_age, <span class="fu">aes</span>(<span class="at">x =</span> Age_Group, <span class="at">y =</span> mean_income, <span class="at">fill =</span> Age_Group)) <span class="sc">+</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Average Income by Age Group"</span>,</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Age Group"</span>,</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Average Income"</span>) <span class="sc">+</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="R-project-new_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>From the visual, we can see that the older a person gets,the higher their income. However, there is a drop in income for persons above 60. This can be attributed to the fact that most persons retire at that age and therefore source of income is reduced.</p>
+<p>Now, let’s explore the influence of income on living conditions across age groups.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Boxplot with legend based on H8 for Income by Living Conditions</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(cleaned_data, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(Age_Group), <span class="at">y =</span> INC, <span class="at">fill =</span> <span class="fu">factor</span>(H8))) <span class="sc">+</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Income by Living Conditions among Age group"</span>,</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Age Group"</span>,</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Income"</span>,</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill =</span> <span class="st">"Living Conditions"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="R-project-new_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>While it is ideal for a household to be able to afford certain level of comfort as a result of higher income, the visual above shows that persons living in a shared apartment (H8 = 0) have slightly higher income compared to their counterparts living in non-shared apartment.The highest earner is between the age of 31-40 years and still lives in a shared apartment and likewise, this trend is same across other categories.</p>
+<p>Having explored the relationship between age and income, it is time to explore the differential impact of other demographic factors in the data set on the socio-economic status of households</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(cleaned_data, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(Female), <span class="at">y =</span> INC, <span class="at">fill =</span> <span class="fu">factor</span>(H8))) <span class="sc">+</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Income by Living Conditions among Gender"</span>,</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Sex"</span>,</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Income"</span>,</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill =</span> <span class="st">"Living Conditions"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="R-project-new_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Females have generally higher income than males. When compared to their living conditions , both male and females with higher income stay in shared apartments compared to their counterparts.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(cleaned_data, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(Mar_Stat), <span class="at">y =</span> INC, <span class="at">fill =</span> <span class="fu">factor</span>(H8))) <span class="sc">+</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Income by Living Conditions by Marital Status"</span>,</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Marital status"</span>,</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Income"</span>,</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill =</span> <span class="st">"Living Conditions"</span>) <span class="sc">+</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="R-project-new_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Taking a lot at the trend, married people have generally higher income. the widowed category have the least income however, those with higher income across all categories stay in shared apartments</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(cleaned_data, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(Eth), <span class="at">y =</span> INC, <span class="at">fill =</span> <span class="fu">factor</span>(H8))) <span class="sc">+</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Income by Living Conditions among Ethnic group"</span>,</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Ethnic group"</span>,</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Income"</span>,</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill =</span> <span class="st">"Living Conditions"</span>) <span class="sc">+</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="R-project-new_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Based on the ethnic group, the white generally earn higher however, none of them live in a non-exclusive apartment. The Asian ethnic are among the lowest earner but none stays in a shared apartment.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(cleaned_data, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(Highest.Ed), <span class="at">y =</span> INC, <span class="at">fill =</span> <span class="fu">factor</span>(H8))) <span class="sc">+</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Income by Living Conditions among Education status"</span>,</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Education Status"</span>,</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Income"</span>,</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill =</span> <span class="st">"Living Conditions"</span>) <span class="sc">+</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="R-project-new_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Based on the ethnic group, individuals with a masters degree or higher earn higher followed by individuals with a Bachelors degree. However, in a categories, those with higher income live in shared apartment and vice versa.</p>
+</section>
+<section id="factors-that-influences-the-household-living-conditions" class="level1">
+<h1>Factors that influences the household living conditions</h1>
+<p>Having looked at the relationship between age and income as well as the differential impact of other demographic factors on the socio-economic status of households, it’s time to determine which of the variables influence on the socioeconomic status is statistically significant. The <strong>Logistic regression</strong> algorithm was employed to explain this relationship.</p>
+<p>The following steps were taken to prepare the data.</p>
+<ol type="1">
+<li>Encoding of categorical variables. The “income_group”, “Age_group”, “Mar_Stat”, “Eth” and “Highest Ed” variables were converted to numbers as a step to prepare the data to be fit into the algorithm.</li>
+</ol>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>model_data <span class="ot">&lt;-</span> cleaned_data</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>model_data<span class="sc">$</span>income_group <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">factor</span>(model_data<span class="sc">$</span>income_group))</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>model_data<span class="sc">$</span>Age_Group <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">factor</span>(model_data<span class="sc">$</span>Age_Group))</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>model_data<span class="sc">$</span>Mar_Stat <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">factor</span>(model_data<span class="sc">$</span>Mar_Stat))</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>model_data<span class="sc">$</span>Eth <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">factor</span>(model_data<span class="sc">$</span>Eth))</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>model_data<span class="sc">$</span>Highest.Ed <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">factor</span>(model_data<span class="sc">$</span>Highest.Ed))</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>model_data <span class="ot">&lt;-</span> model_data[, <span class="fu">c</span>( <span class="st">"Mar_Stat"</span>, <span class="st">"Female"</span>, <span class="st">"H8"</span>, <span class="st">"Eth"</span>,<span class="st">"Highest.Ed"</span>, <span class="st">"income_group"</span>,<span class="st">"Age_Group"</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<ol start="2" type="1">
+<li>Splliting the data into train and test set. 70% of the data was used as the training set and the remaining 30% as testing set</li>
+</ol>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="co">#Used 70% of data set as training set and remaining 30% as testing set</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>sample <span class="ot">&lt;-</span> <span class="fu">sample.split</span>(model_data, <span class="at">SplitRatio =</span> <span class="fl">0.7</span>)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>train  <span class="ot">&lt;-</span> <span class="fu">subset</span>(model_data, sample <span class="sc">==</span> <span class="cn">TRUE</span>)</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>test   <span class="ot">&lt;-</span> <span class="fu">subset</span>(model_data, sample <span class="sc">==</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Building the model</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="do">## fit a logistic regression model with the training dataset</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>log.model <span class="ot">&lt;-</span> <span class="fu">glm</span>(H8 <span class="sc">~</span>Mar_Stat<span class="sc">+</span>Female<span class="sc">+</span>Highest.Ed<span class="sc">+</span>income_group<span class="sc">+</span>Age_Group, <span class="at">data =</span> train, <span class="at">family =</span> <span class="fu">binomial</span>(<span class="at">link =</span> <span class="st">"logit"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Summarizing the model’s output.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(log.model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = H8 ~ Mar_Stat + Female + Highest.Ed + income_group + 
+    Age_Group, family = binomial(link = "logit"), data = train)
+
+Coefficients:
+             Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)   0.51592    0.15195   3.395 0.000686 ***
+Mar_Stat     -0.08763    0.03607  -2.430 0.015107 *  
+Female       -0.36236    0.05992  -6.048 1.47e-09 ***
+Highest.Ed   -0.16158    0.02063  -7.833 4.77e-15 ***
+income_group -0.50364    0.03851 -13.077  &lt; 2e-16 ***
+Age_Group    -0.24540    0.01923 -12.761  &lt; 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 8626.0  on 12135  degrees of freedom
+Residual deviance: 8063.1  on 12130  degrees of freedom
+AIC: 8075.1
+
+Number of Fisher Scoring iterations: 5</code></pre>
+</div>
+</div>
+<section id="findings" class="level2">
+<h2 class="anchored" data-anchor-id="findings">Findings:</h2>
+<ul>
+<li><strong>Marital Status (Mar_Stat):</strong> Being married or having a different marital status compared to being unmarried reduces the likelihood of living in their own apartment without sharing by approximately 0.09 on the log-odds scale.</li>
+<li><strong>Gender (Female):</strong> Being female, as opposed to being male, is associated with a decrease in the likelihood of staying in their own apartment without sharing.</li>
+<li><strong>Education Level (Highest.Ed):</strong> Individuals with a Master’s degree or higher education are less likely to live in their own apartment without sharing, decreasing this likelihood by approximately 0.16 on the log-odds scale.</li>
+<li><strong>Income (income_group):</strong> Higher income is linked with a decreased likelihood of living in a non-shared apartment. For each unit increase in income, the chance of living in their own apartment decreases by around 0.5 on the log-odds scale.</li>
+<li><strong>Age (Age_Group):</strong> With each unit increase in age, there’s a reduced likelihood of living in their own apartment without sharing by approximately 0.25 on the log-odds scale.</li>
+</ul>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion:</h2>
+<p>All these factors—marital status, gender, education, income, and age—show statistically significant associations with the living arrangements (‘H8’ category), indicating their relevance in determining whether individuals opt for their own apartment or shared living arrangements. The ‘***’ in the ‘Signif. codes’ column denotes high statistical significance (p &lt; 0.001) for all variables, implying strong evidence that these factors influence living arrangements.</p>
+</section>
+</section>
+<section id="clustering-analysis" class="level1">
+<h1>Clustering Analysis</h1>
+<p>In a bid to extract deeper insights from the data set, I made a decision to employ clustering analysis. This strategic approach was chosen to uncover inherent patterns and groupings within the data set, aiming to segment respondents based on shared characteristics or behaviors. By utilizing clustering techniques, the objective was to unveil distinct clusters or subgroups among respondents, facilitating a comprehensive understanding of variations and similarities in their socio-economic status. This segmentation strategy sought to provide a nuanced perspective, allowing for a more targeted and insightful exploration of the data set’s intricacies, ultimately enhancing the understanding of the diverse socio-economic landscapes among households.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>cluster_data <span class="ot">&lt;-</span> cleaned_data</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>cluster_data <span class="ot">&lt;-</span> cluster_data[, <span class="fu">c</span>( <span class="st">"Age"</span>,<span class="st">"INC"</span>,<span class="st">"Mar_Stat"</span>, <span class="st">"Female"</span>, <span class="st">"H8"</span>, <span class="st">"Eth"</span>,<span class="st">"Highest.Ed"</span>, <span class="st">"income_group"</span>,<span class="st">"Age_Group"</span>)]</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>cluster_data<span class="sc">$</span>income_group <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">factor</span>(cluster_data<span class="sc">$</span>income_group))</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>cluster_data<span class="sc">$</span>Age_Group <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">factor</span>(cluster_data<span class="sc">$</span>Age_Group))</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>cluster_data<span class="sc">$</span>Mar_Stat <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">factor</span>(cluster_data<span class="sc">$</span>Mar_Stat))</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>cluster_data<span class="sc">$</span>Eth <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">factor</span>(cluster_data<span class="sc">$</span>Eth))</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>cluster_data<span class="sc">$</span>Highest.Ed <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">factor</span>(cluster_data<span class="sc">$</span>Highest.Ed))</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a><span class="co"># K-means clustering with k clusters (adjust 'k' as needed)</span></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="dv">4</span>  <span class="co"># Number of clusters</span></span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>kmeans_model <span class="ot">&lt;-</span> <span class="fu">kmeans</span>(cluster_data, <span class="at">centers =</span> k, <span class="at">nstart =</span> <span class="dv">25</span>)</span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a><span class="co"># View the cluster assignments</span></span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a>cluster_assignments <span class="ot">&lt;-</span> kmeans_model<span class="sc">$</span>cluster</span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a>data_with_clusters <span class="ot">&lt;-</span> <span class="fu">cbind</span>(cluster_data, <span class="at">cluster =</span> cluster_assignments)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Following the clustering analysis, the data set was effectively grouped into four distinct clusters based on respondents’ characteristics. Visualizing this segmentation through a scatter plot portraying the relationship between age and income levels offered illuminating insights. Despite variations in age, the clusters delineated three primary income categories. Firstly, a group comprising high-income earners, notably securing incomes of <strong>200k pounds and above</strong>. Secondly, a middle-income cluster, encompassing individuals earning <strong>between 80k and 200k pounds</strong>. Finally, a lower-income category was unveiled, further subdivided into two sub classes: individuals earning <strong>nil to less than 20k pounds</strong>, and those earning between <strong>20k and 80k pounds</strong>. This clear classification shed light on distinct income brackets, providing an accessible depiction of the socio-economic landscape within the data set.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data_with_clusters, <span class="fu">aes</span>(<span class="at">x =</span> Age, <span class="at">y =</span> INC, <span class="at">color =</span> <span class="fu">factor</span>(cluster))) <span class="sc">+</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"K-means Clustering of Respondents by Age group and income"</span>,</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Age"</span>,</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Income"</span>,</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">"Cluster"</span>) <span class="sc">+</span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="R-project-new_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Income plays a significant role in determining the socio economic status of an individual. Earning higher income means an individual could afford a certain kind of luxury. Hence, further examination was done to visualize income distribution concerning the ‘H8’ variable across different clusters. For individuals categorized as high-income earners, a compelling trend emerged: a larger proportion of those living in shared apartments fell within the income range of 200k to 320k, in contrast to their counterparts residing in non-shared apartments. Notably, for non-shared apartment dwellers in this bracket, the minimum income surpassed 320k, reaching up to 420k. Similar patterns surfaced across other income brackets, where respondents in shared apartments consistently showcased higher income compared to their counterparts in non-shared apartments. This exploration illuminated how income dynamics, especially within high-income brackets, intertwined with living arrangements, emphasizing a prevalent pattern of higher incomes among shared apartment residents, regardless of income category.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data_with_clusters, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(H8), <span class="at">y =</span> INC, <span class="at">fill =</span> <span class="fu">factor</span>(cluster))) <span class="sc">+</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Income by Living Conditions"</span>,</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Living Condition"</span>,</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Income"</span>,</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill =</span> <span class="st">"Clusters"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="R-project-new_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="insights-1" class="level1">
+<h1>Insights</h1>
+<p>The analysis encapsulates a multifaceted relationship between demographic variables and living arrangements. Notably, variables such as marital status, gender, education, income, and age exhibit statistically significant associations with living arrangements (‘H8’ category). These factors intertwine to influence individuals’ preferences for shared or non-shared living spaces. There’s a consistent trend indicating that higher income is linked to a decreased likelihood of living in non-shared apartments across various income brackets. Moreover, the clustering analysis unveils distinct income categories, revealing prevalent income brackets—high earners above 200k pounds, middle earners between 80k and 200k pounds, and lower earners below 80k pounds—while highlighting a propensity for higher incomes among shared apartment residents across income brackets. This suggests that despite higher incomes, a considerable proportion of affluent individuals opt for shared living arrangements, showcasing intriguing nuances in socio-economic preferences beyond the conventional assumption of income dictating exclusive living conditions.</p>
+</section>
+<section id="conclusion-1" class="level1">
+<h1>Conclusion</h1>
+<p>The comprehensive analysis of various demographic factors and their correlation with living arrangements presents a nuanced understanding of socio-economic dynamics. It unveils a complex interplay between income levels, demographic variables, and living preferences. Factors such as marital status, gender, education, and age, in conjunction with income, significantly influence individuals’ choices regarding shared or non-shared living spaces. Surprisingly, while higher income generally correlates with a decreased tendency to live in non-shared apartments, a substantial segment of affluent individuals opts for shared living arrangements. <strong>This challenges the conventional belief that higher income inevitably leads to exclusive living conditions</strong>. The clustering analysis further elucidates distinct income categories, emphasizing prevalent income brackets and underscoring a persistent inclination towards shared apartment residency across income brackets.</p>
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-kang2013" class="csl-entry" role="listitem">
+Kang, Hyun. 2013. <span>“The Prevention and Handling of the Missing Data.”</span> <em>Korean Journal of Anesthesiology</em> 64 (5): 402. <a href="https://doi.org/10.4097/kjae.2013.64.5.402">https://doi.org/10.4097/kjae.2013.64.5.402</a>.
+</div>
+<div id="ref-shipsey2020" class="csl-entry" role="listitem">
+Shipsey, Rachel, Charlie Tomlin, Zoe White, Josie Plachta, Shelley Gammon, and Patricia Dygas. 2020. <span>“2021 Census England and Wales: Developing Record Speed Linkage Methods to Produce Outputs in a Year.”</span> <em>International Journal of Population Data Science</em> 5 (5). <a href="https://doi.org/10.23889/ijpds.v5i5.1436">https://doi.org/10.23889/ijpds.v5i5.1436</a>.
+</div>
+</div></section></div></main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
