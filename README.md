@@ -1,4 +1,5 @@
 # Unveiling Socio-Economic Dynamics: A Comprehensive Exploration of Household Census Data from England, 2021
+[Read full report here](http://rpubs.com/ROCEEY/householdanalysis)
 
 # Introduction
 
@@ -37,4 +38,4 @@ The analysis encapsulates a multifaceted relationship between demographic variab
 
 The comprehensive analysis of various demographic factors and their correlation with living arrangements presents a nuanced understanding of socio-economic dynamics. It unveils a complex interplay between income levels, demographic variables, and living preferences. Factors such as marital status, gender, education, and age, in conjunction with income, significantly influence individuals' choices regarding shared or non-shared living spaces. Surprisingly, while higher income generally correlates with a decreased tendency to live in non-shared apartments, a substantial segment of affluent individuals opts for shared living arrangements. **This challenges the conventional belief that higher income inevitably leads to exclusive living conditions**. The clustering analysis further elucidates distinct income categories, emphasizing prevalent income brackets and underscoring a persistent inclination towards shared apartment residency across income brackets. 
 
-Find report here.
+Find report [here](http://rpubs.com/ROCEEY/householdanalysis).
