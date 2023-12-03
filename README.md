@@ -3,7 +3,7 @@
 
 # Introduction
 
-The 2021 household census conducted in England provides a rich repository of demographic and socio-economic information [@shipsey2020]. Working with a modified snapshot of the census data, my analysis delves into this data set, aiming to uncover compelling insights and discern patterns that illuminate the relationships between demographic variables, income levels, and living conditions.
+The 2021 household census conducted in England provides a rich repository of demographic and socio-economic information. Working with a modified snapshot of the census data, my analysis delves into this data set, aiming to uncover compelling insights and discern patterns that illuminate the relationships between demographic variables, income levels, and living conditions.
 
 # About Data
 
